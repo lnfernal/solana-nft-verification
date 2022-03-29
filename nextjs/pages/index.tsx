@@ -42,7 +42,7 @@ const Home: NextPage = () => {
 
             <footer className={styles.footer}>
                 <a
-                    href="https://verification-solana.vercel.com"
+                    href="https://solana-nft-verification.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
