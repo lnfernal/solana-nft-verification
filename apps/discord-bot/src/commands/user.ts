@@ -4,11 +4,16 @@ import {
 	MessageButton,
 } from "discord.js";
 import { Discord, Slash } from "discordx";
-import { UserDBService } from "../lib/db.service.js";
-import mongo from "../lib/db.js";
+import { DBService } from "../services/db.service.js";
+import mongo from "../utils/db.js";
 import { showError } from "../utils/showError.js";
-import { TokenService } from "../lib/token.service.js";
-const db = new UserDBService(await mongo);
+import { TokenService } from "../services/token.service.js";
+import { TheBlockChainApi } from "../services/theblockchainapi.service.js";
+const db = new DBService(await mongo);
+const BApi = new TheBlockChainApi(
+	process.env.API_KEY_ID || "",
+	process.env.API_KEY_SECRET || ""
+);
 
 @Discord()
 export abstract class UserCommands {
@@ -21,10 +26,15 @@ export abstract class UserCommands {
 			return;
 		}
 		const userdoc = await db.getUserByDiscordId(user.id);
+		console.log(userdoc,user.id,typeof user.id)
 		if (userdoc) {
-			interaction.editReply(
+			await interaction.editReply(
 				`Your account has wallet address ${userdoc.wallet_address}`
 			);
+			//get nft's 
+			const nfts = await BApi.solanaGetNFTsBelongingToWallet({wallet:userdoc.wallet_address,network:"devnet"});
+			console.log(nfts)
+			return
 		} else {
 			// send button to get wallet address
 			const button = new MessageButton({

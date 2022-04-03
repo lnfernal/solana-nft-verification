@@ -1,9 +1,9 @@
 import { CommandInteraction, MessageEmbed, Role } from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
-import { Collection, AdminDBService } from "../lib/db.service.js";
-import mongo from "../lib/db.js"
+import { Collection, DBService } from "../services/db.service.js";
+import mongo from "../utils/db.js"
 import { showError } from "../utils/showError.js";
-const db = new AdminDBService(await mongo);
+const db = new DBService(await mongo);
 
 
 @Discord()

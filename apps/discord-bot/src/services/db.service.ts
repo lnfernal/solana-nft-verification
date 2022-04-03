@@ -7,7 +7,7 @@ type Collection ={
     role_id: string,
 }
  type CollectionDoc  = WithId<Collection>
-class AdminDBService {
+class DBService {
 	public client: MongoClient;
     db: Db;
 	constructor(client: MongoClient) {
@@ -22,25 +22,16 @@ class AdminDBService {
     public async addCollection(collection: Collection): Promise<void> {
         await this.db.collection("collections").insertOne(collection);
     }
-}
-type User = {
-    id: string,
-    username: string,
-    wallet_address: string,
-    verifiedCollections: Collection[]
-}
-type UserDoc = WithId<User>
-class UserDBService {
-    client: MongoClient;
-    db: Db;
-    constructor(client: MongoClient) {
-        this.client = client;
-        this.db = this.client.db("nft-verify");
-    }
-    public async getUserByDiscordId(user_id: string): Promise<UserDoc|null> {
-        const user = await this.db.collection("users").findOne({user_id: user_id});
+    public async getUserByDiscordId(userid: string): Promise<UserDoc|null> {
+        const user = await this.db.collection("users").findOne({userid: userid});
         const user_without_id = user as UserDoc | null;
         return user_without_id;
     }
 }
-export { AdminDBService ,Collection,CollectionDoc,UserDBService  };
+type User = {
+    userid: string,
+    wallet_address: string,
+}
+type UserDoc = WithId<User>
+
+export { DBService ,Collection,CollectionDoc  };
