@@ -24,8 +24,7 @@ class Service {
 		return this.db.collection("users").updateOne(
 			{ userid },
 			{
-				userid,
-				wallet_address,
+				$set: { userid, wallet_address },
 			},
 			{ upsert: true }
 		);

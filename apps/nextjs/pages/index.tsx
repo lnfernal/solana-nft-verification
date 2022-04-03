@@ -10,8 +10,8 @@ import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-const enc = new TextEncoder()
-const dec = new TextDecoder("utf-8")
+const enc = new TextEncoder();
+const dec = new TextDecoder("utf-8");
 function Footer() {
 	return (
 		<footer className={styles.footer}>
@@ -44,7 +44,6 @@ function Header() {
 	);
 }
 
-
 type encodePayload = {
 	userid: string;
 	username: string;
@@ -53,9 +52,12 @@ const Home: NextPage = () => {
 	const router = useRouter();
 	const q = router.query;
 	const token = q.token as string;
-	
+
 	const wallet = useWallet();
 	const [publicKey, setPublicKey] = useState<string>("");
+	const [state, setState] = useState<
+		"not-connected" | "connected" | "signed" | "done"
+	>("not-connected");
 	useEffect(() => {
 		if (wallet.connected && wallet.publicKey) {
 			const pubKey = wallet.publicKey?.toString();
@@ -74,15 +76,20 @@ const Home: NextPage = () => {
 			}),
 		});
 		const data = await res.json();
+		if (res.status == 200) {
+			setState("done");
+		}
 		console.log(data);
 	};
-	const sign= async ()=>{
+	const sign = async () => {
 		if (wallet && wallet.signMessage) {
-			const signed =  await wallet?.signMessage(enc.encode("Verify Account Ownership"))!;
-			console.log(dec.decode(signed))
+			const signed = await wallet?.signMessage(
+				enc.encode("Verify Account Ownership")
+			)!;
+			console.log(dec.decode(signed));
 			post();
 		}
-	}
+	};
 	if (!token) {
 		return (
 			<>
@@ -93,8 +100,22 @@ const Home: NextPage = () => {
 				<p>Looks Like You Came to This Page Without Token</p>
 			</>
 		);
+	} else if (state == "done") {
+		return (
+			<div className="vstack gap-4 col-md-4 mx-auto my-auto">
+				<div className="mx-auto">
+					<h1 className="text-center">You are done </h1>
+					<div className="row">
+						<p className="text-center">
+							Now you can close this page and open discord and run
+							the command once again
+						</p>
+					</div>
+				</div>
+			</div>
+		);
 	} else {
-		const { userid,username }: encodePayload = jwt.decode(
+		const { userid, username }: encodePayload = jwt.decode(
 			token as string
 		) as encodePayload;
 		return (
@@ -102,29 +123,44 @@ const Home: NextPage = () => {
 				<div className="mx-auto">
 					<h1 className="text-center">Welcome {username}</h1>
 					<div className="row">
-
-					{publicKey ?<p className="text-center">Your Wallet Address is {publicKey}</p>
-:<p className="text-center">You are not connected to wallet</p>}
+						{publicKey ? (
+							<p className="text-center">
+								Your Wallet Address is {publicKey}
+							</p>
+						) : (
+							<p className="text-center">
+								You are not connected to wallet
+							</p>
+						)}
 					</div>
 
-					{!publicKey &&<div className="container">
-						<div className="row">
-							<div className="col">
-								<WalletMultiButton />
-							</div>
-							<div className="col">
-								<WalletDisconnectButton />
+					{!publicKey && (
+						<div className="container">
+							<div className="row">
+								<div className="col">
+									<WalletMultiButton />
+								</div>
+								<div className="col">
+									<WalletDisconnectButton />
+								</div>
 							</div>
 						</div>
-					</div>}
+					)}
 				</div>
-				{publicKey &&
-				<div className="vstack gap-2">
-					<h3>
-						Please sign to Verify your {wallet.wallet?.adapter.name} Wallet
-					</h3>
-				<button className="mx-auto btn btn-outline-dark btn-lg" onClick={sign}>Sign Message</button>
-				</div>}
+				{publicKey && (
+					<div className="vstack gap-2">
+						<h3>
+							Please sign to Verify your{" "}
+							{wallet.wallet?.adapter.name} Wallet
+						</h3>
+						<button
+							className="mx-auto btn btn-outline-dark btn-lg"
+							onClick={sign}
+						>
+							Sign Message
+						</button>
+					</div>
+				)}
 			</div>
 		);
 	}
@@ -142,7 +178,7 @@ export default function Page() {
 	);
 }
 
-export async function getServerSideProps(context: { query: any; }) {
+export async function getServerSideProps(context: { query: any }) {
 	const q = context.query;
 	const token = q.token as string;
 	return {
