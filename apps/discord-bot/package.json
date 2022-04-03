@@ -1,5 +1,5 @@
 {
-  "name": "nft-verification",
+  "name": "discord-bot",
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
@@ -16,9 +16,12 @@
     "discord.js": "^13.6.0",
     "discordx": "^9.4.3",
     "dotenv": "^16.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.4.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.23",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.1",

@@ -1,5 +1,5 @@
 {
-  "compilerOptions": {
+    "compilerOptions": {  
     "target": "ESNext",
     "module": "ESNext",
     "outDir": "build",
