@@ -47,7 +47,7 @@ function Header() {
 type encodePayload = {
 	userid: string;
 	username: string;
-	exp:number;
+	exp: number;
 };
 const Home: NextPage = () => {
 	const router = useRouter();
@@ -56,7 +56,8 @@ const Home: NextPage = () => {
 
 	const wallet = useWallet();
 	const [publicKey, setPublicKey] = useState<string>("");
-	const [message,setMessage] = useState<string>("");
+	const [message, setMessage] = useState<string>("");
+	const [sigining, setSigining] = useState<boolean>(false);
 	useEffect(() => {
 		if (wallet.connected && wallet.publicKey) {
 			const pubKey = wallet.publicKey?.toString();
@@ -80,11 +81,13 @@ const Home: NextPage = () => {
 	};
 	const sign = async () => {
 		if (wallet && wallet.signMessage) {
+			setSigining(true);
 			const signed = await wallet?.signMessage(
 				enc.encode("Verify Account Ownership")
 			)!;
 			console.log(dec.decode(signed));
 			post();
+			setSigining(false);
 		}
 	};
 	if (!token) {
@@ -103,19 +106,17 @@ const Home: NextPage = () => {
 				<div className="mx-auto">
 					<h1 className="text-center">Message </h1>
 					<div className="row">
-						<p className="text-center">
-							{message}
-						</p>
+						<p className="text-center">{message}</p>
 					</div>
 				</div>
 			</div>
 		);
 	} else {
-		const { userid, username ,exp}: encodePayload = jwt.decode(
+		const { userid, username, exp }: encodePayload = jwt.decode(
 			token as string
 		) as encodePayload;
-		if (new Date().getTime()>exp*1000) {
-			setMessage("Token Expired")
+		if (new Date().getTime() > exp * 1000) {
+			setMessage("Token Expired");
 		}
 		return (
 			<div className="vstack gap-4 col-md-4 mx-auto my-auto">
@@ -152,11 +153,19 @@ const Home: NextPage = () => {
 							Please sign to Verify your{" "}
 							{wallet.wallet?.adapter.name} Wallet
 						</h3>
+
 						<button
 							className="mx-auto btn btn-outline-dark btn-lg"
 							onClick={sign}
+							disabled={sigining}
 						>
-							Sign Message
+							{sigining && (
+								<div
+									className="spinner-border text-primary"
+									role="status"
+								></div>
+							)}
+							{sigining ? "Signing ..." : "Sign Message"}
 						</button>
 					</div>
 				)}
