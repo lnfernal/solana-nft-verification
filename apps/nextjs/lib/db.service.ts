@@ -3,7 +3,6 @@ type Collection = {
 	guild_id: string;
 	symbol: string;
 	update_authority: string;
-	creator_address: string;
 	log_channel_id: string;
 	role_id: string;
 };

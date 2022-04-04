@@ -1,5 +1,5 @@
 import { Channel, CommandInteraction, MessageActionRow, MessageButton, MessageEmbed, Role } from "discord.js";
-import { ButtonComponent, Discord, Slash, SlashOption } from "discordx";
+import { ButtonComponent, Discord, Slash, SlashOption, } from "discordx";
 import { Collection, DBService } from "../services/db.service.js";
 import { TokenService } from "../services/token.service.js";
 import mongo from "../utils/db.js"
@@ -15,18 +15,17 @@ export abstract class Admin {
 	async ping(interaction: CommandInteraction): Promise<void> {
 		interaction.reply("pong!");
 	}
+	
 	@Slash("add_collection")
 	async addCollection(
 		@SlashOption("symbol")
 		symbol: string,
 		@SlashOption("update_authority")
 		updateAuthority: string,
-		@SlashOption("creator_address")
-		creatorAddress: string,
 		@SlashOption("role",{type:"ROLE"})
 		role:Role,
-		@SlashOption("log-channel",{type:"CHANNEL"})
-		logChannel:Channel,
+		@SlashOption("log-channel",{type:"CHANNEL",required:false})
+		logChannel:Channel|undefined,
 		interaction: CommandInteraction
 	): Promise<void> {
 		const guild_id = interaction.guildId;
@@ -35,7 +34,7 @@ export abstract class Admin {
 			return;
 		}
 		const collections = await db.getCollectionsByGuild(guild_id);
-		if (collections.length > 1) {
+		if (collections.length >= 1) {
 			showError("Only one collection allowed per server in free version; Upgrade to premium for more", interaction);
 			return;
 		}
@@ -43,13 +42,12 @@ export abstract class Admin {
 			guild_id,
 			symbol,
 			update_authority: updateAuthority,
-			creator_address: creatorAddress,
 			role_id: role.id,
-			log_channel_id: logChannel.id
+			log_channel_id: logChannel?.id||""
 		};
 		await db.addCollection(collection);
 		interaction.reply(
-			`Added collection ${symbol} with authority ${updateAuthority} and creator ${creatorAddress} for guild ${guild_id} for role ${role.name}`
+			`Added collection ${symbol} with authority ${updateAuthority} for guild ${guild_id} for role ${role.name}`
 		);
 	}
 	@Slash("show_collections")
@@ -68,7 +66,7 @@ export abstract class Admin {
 			const role = `<@&${collection.role_id}>`;
 			embed.addField(
 				`${i+1}. ${collection.symbol}`,
-				`Role - ${role}\nUpdate Authority: ${collection.update_authority}\nCreator Address: ${collection.creator_address}`
+				`Role - ${role}\nUpdate Authority: ${collection.update_authority}`
 			);
 		});
 		if (collections.length === 0) {

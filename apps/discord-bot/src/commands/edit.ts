@@ -51,28 +51,6 @@ export abstract class Commands {
         interaction.reply(`Updated collection\nUpdate Authority to ${collection.update_authority}`);
     }
     @SlashGroup("edit")
-    @Slash("creator_address")
-    async editCreatorAddress(
-        @SlashOption("creator_address")
-        creatorAddress: string,
-        interaction: CommandInteraction
-    ): Promise<void> {
-        const guild_id = interaction.guildId;
-        if (!guild_id) {
-            showError("No guild id", interaction);
-            return;
-        }
-        const collections = await db.collection("collections").find({guild_id: guild_id}).toArray();
-        if (collections.length === 0) {
-            showError("No collection found for this guild\nFirst Add Collection to server by running /add_collection", interaction);
-            return;
-        }
-        const collection = collections[0];
-        collection.creator_address = creatorAddress;
-        await db.collection("collections").updateOne({_id: collection._id}, {$set: collection});
-        interaction.reply(`Updated collection\nCreator Address to ${collection.creator_address}`);
-    }
-    @SlashGroup("edit")
     @Slash("role")
     async editRoleId(
         @SlashOption("role",{type:"ROLE"})
