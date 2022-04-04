@@ -710,7 +710,7 @@
   dependencies:
     mongodb "*"
 
-"@types/node-fetch@^2.5.12":
+"@types/node-fetch@^2.5.12", "@types/node-fetch@^2.6.1":
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.6.1.tgz#8f127c50481db65886800ef496f20bbf15518975"
   integrity sha512-oMqjURCaxoSIsHSr1E47QHzbmzNR5rK8McHuNb11BOM9cHcIK3Avy0s/b2JlXHoQGTYS3NsvWzV1M0iK7l0wbA==
@@ -1246,6 +1246,11 @@ caniuse-lite@^1.0.30001283:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001322.tgz#2e4c09d11e1e8f852767dab287069a8d0c29d623"
   integrity sha512-neRmrmIrCGuMnxGSoh+x7zYtQFFgnSY2jaomjU56sCkTA6JINqQrxutF459JpWcWRajvoyn95sOXq4Pqrnyjew==
 
+centra@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/centra/-/centra-2.5.0.tgz#854c30f9a3ff50da49fa69a8cb441aa25aa1e8e8"
+  integrity sha512-CnSF1HD8vOOgNbE4P2fZEhdhfAohvpcF3DSdSvEcSHDAZvr+Xfw73isT8SXJJc3VMBqSwjXhr29/ikHUgFcypg==
+
 chalk@^4.0.0, chalk@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
@@ -1496,12 +1501,10 @@ discord-api-types@^0.26.0:
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.26.1.tgz#726f766ddc37d60da95740991d22cb6ef2ed787b"
   integrity sha512-T5PdMQ+Y1MEECYMV5wmyi9VEYPagEDEi4S0amgsszpWY0VB9JJ/hEvM6BgLhbdnKky4gfmZEXtEEtojN8ZKJQQ==
 
-discord.js-light@^4.6.5:
-  version "4.6.5"
-  resolved "https://registry.yarnpkg.com/discord.js-light/-/discord.js-light-4.6.5.tgz#67b91f046bc29328a26a08e1bb12d57e6d797239"
-  integrity sha512-txfiH/g8DswNI3DaDf/ueEaybrrHlKlKuZRF3n3jZdvPlDYy5gbooHCowhjz1bmasHs7zSA2mN3CxdYy1VXDvQ==
-  dependencies:
-    discord.js "^13.6.0"
+discord-typings@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/discord-typings/-/discord-typings-10.0.3.tgz#ef8372aec4f4b338495b06803ae739d0c7a72c0f"
+  integrity sha512-B1gCvaTbgTAmyXxEe5LDW6qip8Jfbo0j2jadRvVckGEZzRXbXZpixD6/combwiBensFtMSOyuGPlFPX3AS63Zg==
 
 discord.js@^13.6.0:
   version "13.6.0"
@@ -2078,7 +2081,7 @@ form-data@^3.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
-form-data@^4.0.0:
+form-data@^4.0.0, form-data@~4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
   integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
@@ -3630,6 +3633,15 @@ smart-buffer@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
   integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
+
+snowtransfer@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/snowtransfer/-/snowtransfer-0.4.3.tgz#a54c01bdf163b7902fdc87419b5018c4598d5fde"
+  integrity sha512-CaPj/CIqKh9s07mCXFDF7xA99ZLkk1OpOT2Cw00s3IgEQ6MNe89wgoVZPHqxgfjR+46/XnItWOpVNrxuhhJMkQ==
+  dependencies:
+    centra "^2.5.0"
+    discord-typings "^10.0.3"
+    form-data "~4.0.0"
 
 socks@^2.6.2:
   version "2.6.2"
