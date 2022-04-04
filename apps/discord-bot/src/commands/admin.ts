@@ -32,7 +32,11 @@ export abstract class Admin {
 			showError("No guild id", interaction);
 			return;
 		}
-		
+		const collections = await db.getCollectionsByGuild(guild_id);
+		if (collections.length > 1) {
+			showError("Only one collection allowed per server in free version; Upgrade to premium for more", interaction);
+			return;
+		}
 		const collection:Collection = {
 			guild_id,
 			symbol,
@@ -45,7 +49,7 @@ export abstract class Admin {
 			`Added collection ${symbol} with authority ${updateAuthority} and creator ${creatorAddress} for guild ${guild_id} for role ${role.name}`
 		);
 	}
-	@Slash("list_collections")
+	@Slash("show_collections")
 	async listCollections(interaction: CommandInteraction): Promise<void> {
 		const guild_id = interaction.guildId;
 		if (!guild_id){
@@ -101,7 +105,7 @@ export abstract class Admin {
 		const button = new MessageButton({
 			label: "Connect Wallet",
 			style: "LINK",
-			url: "https://solana-nft-verification.vercel.app/"+`?token=${TokenService.getToken(user.id,user.username,guildid)}`,
+			url: "https://solana-nft-verification.vercel.app/verify/"+`?token=${TokenService.getToken(user.id,user.username,guildid)}`,
 		});
 		// Create a MessageActionRow and add the button to that row.
 		const row = new MessageActionRow().addComponents(button);
@@ -109,6 +113,7 @@ export abstract class Admin {
 		interaction.editReply({
 			content: `Use this custom link to connect (valid till <t:${t}>)\nGuild: ${guildid}\nMember: ${user.id}`,
 			components: [row],
+			
 		});
 	}
 }

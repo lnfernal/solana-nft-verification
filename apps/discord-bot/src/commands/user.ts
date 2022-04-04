@@ -41,7 +41,7 @@ export abstract class UserCommands {
 			const button = new MessageButton({
 				label: "Connect Wallet",
 				style: "LINK",
-				url: "https://solana-nft-verification.vercel.app/"+`?token=${TokenService.getToken(user.id,user.username,guildid)}`,
+				url: "https://solana-nft-verification.vercel.app/verify/"+`?token=${TokenService.getToken(user.id,user.username,guildid)}`,
 			});
 			// Create a MessageActionRow and add the button to that row.
 			const row = new MessageActionRow().addComponents(button);
