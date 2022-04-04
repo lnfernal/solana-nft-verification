@@ -52,11 +52,12 @@ export default async function handler(
 					username,
 					wallet_address,
 				});
-
+				return 
 			} else {
 				res.status(400).json({
 					message: "no nfts owned",
 				});
+				return
 			}
 		} catch (error) {
 			console.log(error)
@@ -66,5 +67,6 @@ export default async function handler(
 		res.status(200).json(decoded);
 	} catch (e) {
 		res.status(400).json({ message: "invalid token" });
+		return
 	}
 }

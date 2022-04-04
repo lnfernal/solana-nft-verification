@@ -105,9 +105,9 @@ export abstract class Admin {
 		});
 		// Create a MessageActionRow and add the button to that row.
 		const row = new MessageActionRow().addComponents(button);
-
+		const t = Math.floor(new Date().getTime()/1000) + (5*60)
 		interaction.editReply({
-			content: "Your account has no wallet Connected. Please click the button below to Connect.",
+			content: `Use this custom link to connect (valid till <t:${t}>)\nGuild: ${guildid}\nMember: ${user.id}`,
 			components: [row],
 		});
 	}
