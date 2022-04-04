@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import mongoClient from "../../lib/mongodb";
 import { MongoClient } from "mongodb";
-
 import jwt from "jsonwebtoken";
 import { DBService } from "../../lib/db.service";
 import { Verify } from "../../lib/verify";
@@ -11,11 +10,14 @@ type encodePayload = {
 	userid: string;
 	username: string;
 	guildid:string;
+	exp:number
 };
 type User = {
 	userid: string;
 	wallet_address: string;
 };
+
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
@@ -29,11 +31,16 @@ export default async function handler(
 	}
 	try {
 		const decoded = jwt.verify(token, key);
-		const { userid, username,guildid } = decoded as encodePayload;
+		const { userid, username,guildid ,exp} = decoded as encodePayload;
 		console.log(decoded);
+		if (new Date().getTime()>exp*1000) {
+			res.status(400).json({ message: "token expired" });
+			return;
+		}
 		const service = new DBService((await mongoClient) as MongoClient);
-		await service.addWallet(userid, req.body.wallet_address);
 		const verify = new Verify(service);
+		await service.addWallet(userid, req.body.wallet_address);
+
 		let doesOwn = false;
 		try {
 			
@@ -45,12 +52,14 @@ export default async function handler(
 					username,
 					wallet_address,
 				});
+
 			} else {
 				res.status(400).json({
 					message: "no nfts owned",
 				});
 			}
 		} catch (error) {
+			console.log(error)
 			res.status(418).json({message:"error verifying"})
 			return
 		}

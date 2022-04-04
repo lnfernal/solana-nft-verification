@@ -47,6 +47,7 @@ function Header() {
 type encodePayload = {
 	userid: string;
 	username: string;
+	exp:number;
 };
 const Home: NextPage = () => {
 	const router = useRouter();
@@ -55,9 +56,7 @@ const Home: NextPage = () => {
 
 	const wallet = useWallet();
 	const [publicKey, setPublicKey] = useState<string>("");
-	const [state, setState] = useState<
-		"not-connected" | "connected" | "signed" | "done"
-	>("not-connected");
+	const [message,setMessage] = useState<string>("");
 	useEffect(() => {
 		if (wallet.connected && wallet.publicKey) {
 			const pubKey = wallet.publicKey?.toString();
@@ -65,7 +64,7 @@ const Home: NextPage = () => {
 		}
 	}, [wallet.connected, wallet.publicKey]);
 	const post = async () => {
-		const res = await fetch("/api/add_wallet", {
+		const res = await fetch("/api/verify", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -76,9 +75,7 @@ const Home: NextPage = () => {
 			}),
 		});
 		const data = await res.json();
-		if (res.status == 200) {
-			setState("done");
-		}
+		setMessage(data.message);
 		console.log(data);
 	};
 	const sign = async () => {
@@ -100,24 +97,26 @@ const Home: NextPage = () => {
 				<p>Looks Like You Came to This Page Without Token</p>
 			</>
 		);
-	} else if (state == "done") {
+	} else if (message) {
 		return (
 			<div className="vstack gap-4 col-md-4 mx-auto my-auto">
 				<div className="mx-auto">
-					<h1 className="text-center">You are done </h1>
+					<h1 className="text-center">Message </h1>
 					<div className="row">
 						<p className="text-center">
-							Now you can close this page and open discord and run
-							the command once again
+							{message}
 						</p>
 					</div>
 				</div>
 			</div>
 		);
 	} else {
-		const { userid, username }: encodePayload = jwt.decode(
+		const { userid, username ,exp}: encodePayload = jwt.decode(
 			token as string
 		) as encodePayload;
+		if (new Date().getTime()>exp*1000) {
+			setMessage("Token Expired")
+		}
 		return (
 			<div className="vstack gap-4 col-md-4 mx-auto my-auto">
 				<div className="mx-auto">
