@@ -4,6 +4,7 @@ type Collection = {
 	symbol: string;
 	update_authority: string;
 	creator_address: string;
+	log_channel_id: string;
 	role_id: string;
 };
 type CollectionDoc = WithId<Collection>;

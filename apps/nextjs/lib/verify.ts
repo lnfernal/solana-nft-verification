@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import { CollectionDoc, DBService, UserDoc } from "./db.service"
+import { Collection, CollectionDoc, DBService, UserDoc } from "./db.service"
 import clientPromise from "./mongodb"
 // import discord from "./discord";
 
@@ -34,7 +34,7 @@ export class Verify {
             }
         })
         for (const c of owned) {
-            await GiveRole(userid,c.guild_id,c.role_id)
+            await GiveRole(userid,c)
         }
         
 
@@ -42,7 +42,10 @@ export class Verify {
         return owned.length>0
     }
 }
-async function GiveRole(userid:string,guildid:string,roleid:string){
+async function GiveRole(userid:string,c:Collection){
     const client = new SnowTransfer(process.env.BOT_TOKEN || "",);
-    await client.guild.addGuildMemberRole(guildid,userid,roleid)
+    await client.guild.addGuildMemberRole(c.guild_id,userid,c.role_id);
+    //send message in log channel
+    const message = await client.channel.createMessage(c.log_channel_id,`<@${userid}> has been verified for ${c.symbol} and has been given the role <@&${c.role_id}>`)
+    
 }

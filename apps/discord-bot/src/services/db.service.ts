@@ -5,6 +5,7 @@ type Collection ={
     update_authority: string,
     creator_address: string,
     role_id: string,
+    log_channel_id: string,
 }
  type CollectionDoc  = WithId<Collection>
 class DBService {

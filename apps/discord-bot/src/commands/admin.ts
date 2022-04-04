@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageActionRow, MessageButton, MessageEmbed, Role } from "discord.js";
+import { Channel, CommandInteraction, MessageActionRow, MessageButton, MessageEmbed, Role } from "discord.js";
 import { ButtonComponent, Discord, Slash, SlashOption } from "discordx";
 import { Collection, DBService } from "../services/db.service.js";
 import { TokenService } from "../services/token.service.js";
@@ -25,6 +25,8 @@ export abstract class Admin {
 		creatorAddress: string,
 		@SlashOption("role",{type:"ROLE"})
 		role:Role,
+		@SlashOption("log-channel",{type:"CHANNEL"})
+		logChannel:Channel,
 		interaction: CommandInteraction
 	): Promise<void> {
 		const guild_id = interaction.guildId;
@@ -42,7 +44,8 @@ export abstract class Admin {
 			symbol,
 			update_authority: updateAuthority,
 			creator_address: creatorAddress,
-			role_id: role.id
+			role_id: role.id,
+			log_channel_id: logChannel.id
 		};
 		await db.addCollection(collection);
 		interaction.reply(
@@ -94,7 +97,7 @@ export abstract class Admin {
 	}
 	@ButtonComponent("go")
 	async go(interaction: CommandInteraction): Promise<void> {
-		await interaction.deferReply()
+		await interaction.deferReply({ephemeral:true})
 		const guildid = interaction.guild?.id ||"";
 		const user = interaction.member?.user;
 		if (!user) {
@@ -113,7 +116,6 @@ export abstract class Admin {
 		interaction.editReply({
 			content: `Use this custom link to connect (valid till <t:${t}>)\nGuild: ${guildid}\nMember: ${user.id}`,
 			components: [row],
-			
 		});
 	}
 }
