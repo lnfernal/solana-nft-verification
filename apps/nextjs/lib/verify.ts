@@ -33,9 +33,10 @@ export class Verify {
                 owned.push(collection)
             }
         })
-        owned.forEach(async c => {
+        for (const c of owned) {
             await GiveRole(userid,c.guild_id,c.role_id)
-        })
+        }
+        
 
         console.log(owned)
         return owned.length>0
