@@ -1,9 +1,10 @@
 import { MongoClient } from "mongodb";
 import { CollectionDoc, DBService, UserDoc } from "./db.service"
 import clientPromise from "./mongodb"
-import discord from "./discord";
+// import discord from "./discord";
 
 import { TheBlockChainApi,Needed } from "./theblockchainapi.service"
+import { SnowTransfer } from "snowtransfer";
 const BApi = new TheBlockChainApi(
 	process.env.API_KEY_ID || "",
 	process.env.API_KEY_SECRET || ""
@@ -32,8 +33,8 @@ export class Verify {
                 owned.push(collection)
             }
         })
-        owned.forEach(c => {
-            GiveRole(userid,c.guild_id,c.role_id)
+        owned.forEach(async c => {
+            await GiveRole(userid,c.guild_id,c.role_id)
         })
 
         console.log(owned)
@@ -41,5 +42,6 @@ export class Verify {
     }
 }
 async function GiveRole(userid:string,guildid:string,roleid:string){
-    await discord.guild.addGuildMemberRole(guildid,userid,roleid)
+    const client = new SnowTransfer(process.env.BOT_TOKEN || "",);
+    await client.guild.addGuildMemberRole(guildid,userid,roleid)
 }
