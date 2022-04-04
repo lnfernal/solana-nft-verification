@@ -1,6 +1,7 @@
-import { CommandInteraction, MessageEmbed, Role } from "discord.js";
-import { Discord, Slash, SlashOption } from "discordx";
+import { CommandInteraction, MessageActionRow, MessageButton, MessageEmbed, Role } from "discord.js";
+import { ButtonComponent, Discord, Slash, SlashOption } from "discordx";
 import { Collection, DBService } from "../services/db.service.js";
+import { TokenService } from "../services/token.service.js";
 import mongo from "../utils/db.js"
 import { showError } from "../utils/showError.js";
 const db = new DBService(await mongo);
@@ -68,5 +69,46 @@ export abstract class Admin {
 		}
 			
 		interaction.reply({ embeds: [embed] });
+	}
+	@Slash("setup_message")
+	async setupMessage(interaction: CommandInteraction): Promise<void> {
+		// send button to get wallet address
+		const embed = new MessageEmbed({
+			title: "Verify Your Assets",
+		})
+		const button = new MessageButton({
+			label: "Lets Go!",
+			style: "PRIMARY",
+			customId:"go"
+		});
+		// Create a MessageActionRow and add the button to that row.
+		const row = new MessageActionRow().addComponents(button);
+		await interaction.reply("Creating Message")
+		await interaction.channel?.send({embeds:[embed],components:[row]})
+		await interaction.editReply("Message Created",)
+		
+	}
+	@ButtonComponent("go")
+	async go(interaction: CommandInteraction): Promise<void> {
+		await interaction.deferReply()
+		const guildid = interaction.guild?.id ||"";
+		const user = interaction.member?.user;
+		if (!user) {
+			showError("No user", interaction);
+			return;
+		}
+		// send button to get wallet address
+		const button = new MessageButton({
+			label: "Connect Wallet",
+			style: "LINK",
+			url: "https://solana-nft-verification.vercel.app/"+`?token=${TokenService.getToken(user.id,user.username,guildid)}`,
+		});
+		// Create a MessageActionRow and add the button to that row.
+		const row = new MessageActionRow().addComponents(button);
+
+		interaction.editReply({
+			content: "Your account has no wallet Connected. Please click the button below to Connect.",
+			components: [row],
+		});
 	}
 }
