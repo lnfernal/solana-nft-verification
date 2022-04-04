@@ -1,4 +1,4 @@
-import { CommandInteraction, Role } from "discord.js";
+import { Channel, CommandInteraction, Role } from "discord.js";
 import { Discord, Slash, SlashGroup, SlashOption } from "discordx";
 import mongo from "../utils/db.js"
 import { showError } from "../utils/showError.js";
@@ -109,4 +109,27 @@ export abstract class Commands {
             }
         }
     }
+    @SlashGroup("edit")
+    @Slash("log_channel")
+    async editLogChannel(
+        @SlashOption("log-channel",{type:"CHANNEL"})
+		logChannel:Channel,
+        interaction: CommandInteraction
+    ): Promise<void> {
+        const guild_id = interaction.guildId;
+        if (!guild_id) {
+            showError("No guild id", interaction);
+            return;
+        }
+        const collections = await db.collection("collections").find({guild_id: guild_id}).toArray();
+        if (collections.length === 0) {
+            showError("No collection found for this guild\nFirst Add Collection to server by running /add_collection", interaction);
+            return;
+        }
+        const collection = collections[0];
+        collection.log_channel_id = logChannel.id;
+        await db.collection("collections").updateOne({_id: collection._id}, {$set: collection});
+        interaction.reply(`Updated collection\nLog Channel to <#${collection.log_channel_id}>`);
+    }
+
 }
