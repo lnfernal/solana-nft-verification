@@ -27,12 +27,13 @@ export abstract class UserCommands {
 		}
 		const userdoc = await db.getUserByDiscordId(user.id);
 		console.log(userdoc,user.id,typeof user.id)
+		const guildid = interaction.guild?.id ||"";
 		if (userdoc) {
 			await interaction.editReply(
 				`Your account has wallet address ${userdoc.wallet_address}`
 			);
 			//get nft's 
-			const nfts = await BApi.solanaGetNFTsBelongingToWallet({wallet:userdoc.wallet_address,network:"devnet"});
+			const nfts = await BApi.solanaGetNFTsBelongingToWallet({wallet:userdoc.wallet_address,network:"mainnet-beta"});
 			console.log(nfts)
 			return
 		} else {
@@ -40,7 +41,7 @@ export abstract class UserCommands {
 			const button = new MessageButton({
 				label: "Connect Wallet",
 				style: "LINK",
-				url: "https://solana-nft-verification.vercel.app/"+`?token=${TokenService.getToken(user.id,user.username)}`,
+				url: "https://solana-nft-verification.vercel.app/"+`?token=${TokenService.getToken(user.id,user.username,guildid)}`,
 			});
 			// Create a MessageActionRow and add the button to that row.
 			const row = new MessageActionRow().addComponents(button);

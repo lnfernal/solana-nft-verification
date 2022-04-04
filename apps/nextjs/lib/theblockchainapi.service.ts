@@ -2,7 +2,7 @@ import {Error} from "../types"
 import { OffChainData, Root } from "../types";
 import fetch from 'node-fetch';
 
-type Needed={
+export type Needed={
 	symbol:string,
 	update_authority:string,
 	creator_address:string
@@ -31,7 +31,7 @@ export class TheBlockChainApi {
 	}: {
 		wallet: string;
 		network: string;
-	}): Promise<Needed[] | Error> {
+	}): Promise<Needed[]> {
 
 		const url =
 			`https://api.blockchainapi.com/v1/solana/wallet/${network}/${wallet}/nfts`;
@@ -43,11 +43,8 @@ export class TheBlockChainApi {
         const json = await response.json() as any;
         console.log(json);
         if (json.error_message){
-            return {
-                errors: [{
-                    msg: json.error_message     
-                }]
-            }
+            throw new Error(json.error_message);
+             
         }
         const data = json as Root;
 		console.log(data)
