@@ -41,11 +41,5 @@ export class Verify {
     }
 }
 async function GiveRole(userid:string,guildid:string,roleid:string){
-    const guild = discord.guilds.cache.get(guildid)
-    if(!guild) throw new Error("guild not found")
-    const member = guild.members.cache.get(userid)
-    if(!member) throw new Error("member not found")
-    const role = guild.roles.cache.get(roleid)
-    if(!role) throw new Error("role not found")
-    await member.roles.add(role)
+    await discord.guild.addGuildMemberRole(guildid,userid,roleid)
 }

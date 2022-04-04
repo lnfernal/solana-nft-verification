@@ -30,13 +30,12 @@
         "@solana/wallet-adapter-react": "^0.15.3",
         "@solana/wallet-adapter-react-ui": "^0.9.5",
         "@solana/wallet-adapter-wallets": "^0.15.2",
-        "discord.js": "^13.6.0",
-        "discord.js-light": "^4.6.5",
         "jsonwebtoken": "^8.5.1",
         "mongodb": "^4.4.1",
         "next": "12.1.0",
         "react": "17.0.2",
-        "react-dom": "17.0.2"
+        "react-dom": "17.0.2",
+        "snowtransfer": "^0.4.3"
     },
     "devDependencies": {
         "@types/jsonwebtoken": "8.5.8",
