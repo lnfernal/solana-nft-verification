@@ -1,5 +1,5 @@
 import {SnowTransfer} from 'snowtransfer';
 
-const client = new SnowTransfer(process.env.API_KEY_ID || "");
+const client = new SnowTransfer(process.env.BOT_TOKEN || "",);
 
 export default client
