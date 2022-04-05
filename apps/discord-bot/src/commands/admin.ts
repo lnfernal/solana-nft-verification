@@ -64,10 +64,8 @@ export abstract class Admin {
 		});
 		collections.forEach((collection,i) => {
 			const role = `<@&${collection.role_id}>`;
-			embed.addField(
-				`${i+1}. ${collection.symbol}`,
-				`Role - ${role}\nUpdate Authority: ${collection.update_authority}`
-			);
+			const logChannel = collection.log_channel_id ? `<#${collection.log_channel_id}>` : "None";
+			embed.addField(`${i+1}. ${collection.symbol}`, `Update Authority: ${collection.update_authority}\nRole: ${role}\nLog Channel: ${logChannel}`);
 		});
 		if (collections.length === 0) {
 			embed.addField("No collections", "Add a collection with `/add_collection`");
