@@ -1,77 +1,31 @@
-# Turborepo starter
+# Solana NFT verification Bot
 
-This is an official Yarn v1 starter turborepo.
+It is for communities to setup auto roles & verification in there discord server on the basis of whether the user owns NFT from the collection 
 
-## What's inside?
+It has two parts
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
+- a discord bot
+- a verification website
 
-### Apps and Packages
+## Flow 
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+the flow for this goes as such
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+  1. Community admins add this bot to there server
+  2. They do the /add_collection command give all the parameters ![image](https://user-images.githubusercontent.com/64301340/161803454-4073b1fd-45e6-4c7c-bb43-dfb7ddb23052.png)
+  
+  3.They can see the current collection by
+  ![image](https://user-images.githubusercontent.com/64301340/161804763-ceaa615f-518f-40a6-9caa-4505c4036ab3.png)
+  
+  4. Admin can go to a channel and run /setup_message command and then delete the reply
+      ![image](https://user-images.githubusercontent.com/64301340/161805308-db692b79-3c18-4999-9c64-9900fcd525e5.png)
+  5. When new user comes he click on lets go button he get a link to connect his wallet user follows the instructions on website
+    ![image](https://user-images.githubusercontent.com/64301340/161806009-d80429a7-9127-46e3-b5e4-00c88c5c2cf9.png)
+  6. If not own any nfts get a link to buy them on magic eden
+  ![image](https://user-images.githubusercontent.com/64301340/161806390-328c3e44-6bf5-42fa-a9d2-c10d12419637.png)
+  7. if owns nft from that collection then get a role and a message is displayed in server
+      ![image](https://user-images.githubusercontent.com/64301340/161806754-061991cd-866a-4d07-98ce-d5e4c60c8c53.png)
+  8. there are edit commands for admins
+      ![image](https://user-images.githubusercontent.com/64301340/161807032-efa68aee-aff7-4b7d-bdc5-338b69e6608f.png)
 
-### Utilities
 
-This turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-## Setup
-
-This repository is used in the `npx create-turbo` command, and selected when choosing which package manager you wish to use with your monorepo (Yarn).
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching (Beta)](https://turborepo.org/docs/features/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching (Beta) you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/features/pipelines)
-- [Caching](https://turborepo.org/docs/features/caching)
-- [Remote Caching (Beta)](https://turborepo.org/docs/features/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/features/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
