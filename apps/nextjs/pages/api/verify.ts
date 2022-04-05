@@ -40,7 +40,7 @@ export default async function handler(
 		const service = new DBService((await mongoClient) as MongoClient);
 		const verify = new Verify(service);
 		await service.addWallet(userid, req.body.wallet_address);
-
+		const data =(await service.getCollectionsByGuild(guildid))[0]
 		let doesOwn = false;
 		try {
 			
@@ -56,12 +56,13 @@ export default async function handler(
 			} else {
 				res.status(400).json({
 					message: "no nfts owned",
+					symbol:data.symbol
 				});
 				return
 			}
 		} catch (error) {
 			console.log(error)
-			res.status(418).json({message:"error verifying"})
+			res.status(418).json({message:"error verifying",symbol:data.symbol})
 			return
 		}
 		res.status(200).json(decoded);

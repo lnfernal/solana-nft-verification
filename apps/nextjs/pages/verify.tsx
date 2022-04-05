@@ -49,6 +49,10 @@ type encodePayload = {
 	username: string;
 	exp: number;
 };
+type data = {
+	message: string;
+	symbol: string;
+}
 const Home: NextPage = () => {
 	const router = useRouter();
 	const q = router.query;
@@ -56,8 +60,10 @@ const Home: NextPage = () => {
 
 	const wallet = useWallet();
 	const [publicKey, setPublicKey] = useState<string>("");
-	const [message, setMessage] = useState<string>("");
+	// const [message, setMessage] = useState<string>("");
 	const [sigining, setSigining] = useState<boolean>(false);
+	const [data,setData] = useState<data>({message:"",symbol:""});
+	const setMessage = (m:string)=>setData({message:m,symbol:""})
 	useEffect(() => {
 		if (wallet.connected && wallet.publicKey) {
 			const pubKey = wallet.publicKey?.toString();
@@ -76,7 +82,9 @@ const Home: NextPage = () => {
 			}),
 		});
 		const data = await res.json();
+
 		setMessage(data.message);
+		setData(data);
 		console.log(data);
 	};
 	const sign = async () => {
@@ -86,8 +94,9 @@ const Home: NextPage = () => {
 				enc.encode("Verify Account Ownership")
 			)!;
 			console.log(dec.decode(signed));
-			post();
 			setSigining(false);
+			setMessage("Checking...");
+			await post();
 		}
 	};
 	if (!token) {
@@ -100,13 +109,18 @@ const Home: NextPage = () => {
 				<p>Looks Like You Came to This Page Without Token</p>
 			</>
 		);
-	} else if (message) {
+	} else if (data.message) {
 		return (
 			<div className="vstack gap-4 col-md-4 mx-auto my-auto">
 				<div className="mx-auto">
 					<h1 className="text-center">Message </h1>
 					<div className="row">
-						<p className="text-center">{message}</p>
+						<p className="text-center">{data.message}</p>
+						{/* divider */}
+						<div className="divider divider-horizontal h-10"></div>
+						{data.symbol &&<p className="text-center">
+							<a href={`https://magiceden.io/marketplace/${data.symbol}`}>Buy {data.symbol} on Magic Eden</a>
+						</p>}
 					</div>
 				</div>
 			</div>
